@@ -20,11 +20,16 @@
             background: steelblue;
             border-radius: 10px;
             color: ghostwhite;
+
         }
 
         img {
             width: 175px;
             padding: 1%;
+        }
+
+        #addAnimal {
+            position: relative;
         }
 
     </style>
@@ -38,7 +43,6 @@
     <div id="animalView"></div>
 
     <form>
-
         <input type="text" placeholder="Add an animal" id="animalInput">
         <!-- submit button triggers new gif to be added -->
         <input id="addGif" type="submit" value="Add a gif">
@@ -48,7 +52,6 @@
 
 <!-- gif images dumped here -->
 <div id="addAnimal">
-
 </div>
 
 <script>
@@ -56,7 +59,7 @@
 
 
     //initial array of animal buttons
-    var animals = ["dragonfly","flamingo","bird", "butterfly", "ladybug"];
+    var animals = ["dragonfly","flamingo","bird", "butterfly", "ladybug", "bee", "tiger", "peacock", "zebra", "eagle"];
 
     //use this to display gifs
     function displayGif (){
@@ -79,6 +82,9 @@
 
                     console.log(response.data[i]);
 
+                    var rating = response.data[i].rating;
+                    console.log(rating);
+
                     var imageURL = response.data[i].images.original.url;
                     var animatedImage = response.data[i].images.original.url;
                     var stillImage = response.data[i].images.original_still.url;
@@ -86,12 +92,14 @@
 
                     //setting the gif image attributes
                     theGif.attr("src", imageURL);
+                    theGif.attr("class", "box");
                     theGif.attr("alt", "animal image");
                     theGif.attr("data-still", stillImage);
                     theGif.attr("data-animate", animatedImage);
-                    theGif.attr("class", "box");
+                    theGif.attr("data-state", "animate");
 
-                    $("#addAnimal").append(theGif);
+
+                    $("#addAnimal").append("Rating: " + rating,theGif);
 
                 }
 
@@ -103,7 +111,20 @@
 
     //function to pause gif
     $(document).on('click', '.box', function () {
-        console.log("hi");
+        //console.log("hi");
+
+        var state = $(this).attr("data-state");
+
+        if (state === "animate"){
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        } else {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+
+
+        }
+
     });
 
 
