@@ -15,11 +15,16 @@
         }
 
         button {
-            padding: 5px;
-            font-size: 15px;
-            background: steelblue;
-            border-radius: 10px;
-            color: ghostwhite;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
 
         }
 
@@ -32,26 +37,57 @@
             position: relative;
         }
 
+        #addAnimal p {
+            display: inline;
+            margin: 0;
+        }
+
+        figure {
+            display: inline-block;
+            border: 1px solid;
+            background: antiquewhite;
+        }
+
+        figcaption {
+            text-align: center;
+        }
+
+        body {
+            text-align: center;
+            background: palegoldenrod;
+        }
+
     </style>
 </head>
 
 <body>
 
+<header>
+    <h1>Giphy Generator</h1>
+    <p>Click on a existing button to generate a giphy. Or generate a giphy of your own choice.</p>
+</header>
+
 <section class="container">
+
+    <form>
+        <input type="text" placeholder="Enter text" id="animalInput">
+        <!-- submit button triggers new gif to be added -->
+        <input id="addGif" type="submit" value="Add a gif">
+    </form>
 
     <!-- gif buttons dumped here-->
     <div id="animalView"></div>
 
-    <form>
-        <input type="text" placeholder="Add an animal" id="animalInput">
-        <!-- submit button triggers new gif to be added -->
-        <input id="addGif" type="submit" value="Add a gif">
-    </form>
+
+
 
 </section>
 
 <!-- gif images dumped here -->
 <div id="addAnimal">
+
+
+
 </div>
 
 <script>
@@ -66,7 +102,7 @@
         var theAnimal = $(this).attr("data-name");
         //console.log(theAnimal);
 
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + theAnimal + "&limit=5&api_key=dc6zaTOxFJmzC";
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + theAnimal + "&limit=8&api_key=dc6zaTOxFJmzC";
 
         //Performing an AJAX GET request to our query URL
         $.ajax({
@@ -88,8 +124,12 @@
                     var imageURL = response.data[i].images.original.url;
                     var animatedImage = response.data[i].images.original.url;
                     var stillImage = response.data[i].images.original_still.url;
+
+                    var containGif = $("<figure>");
+
                     var theGif = $("<img>");
 
+                    var counter = [i].toString();
                     //setting the gif image attributes
                     theGif.attr("src", imageURL);
                     theGif.attr("class", "box");
@@ -97,9 +137,13 @@
                     theGif.attr("data-still", stillImage);
                     theGif.attr("data-animate", animatedImage);
                     theGif.attr("data-state", "animate");
+                    theGif.attr("id", [i]);
 
+                    containGif.attr("id", [i]);
 
-                    $("#addAnimal").append("Rating: " + rating,theGif);
+                    $("#addAnimal").append(containGif);
+
+                    $("#" + counter).append(theGif, "<figcaption> Rated: " + rating + "</figcaption>");
 
                 }
 
@@ -132,6 +176,7 @@
     function renderButtons() {
         // Delete content inside the animal-view div prior to adding new movies
         // this is necessary otherwise you will have repeat buttons
+
         $("#animalView").empty();
 
         for (var i = 0; i < animals.length; i++) {
