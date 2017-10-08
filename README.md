@@ -1,4 +1,4 @@
-# Crystal collector numbers game 
+# GIPHY Generator
 
 Using the GIPHY API, I created a dynamic web page that populates gifs of your choice. 
 
